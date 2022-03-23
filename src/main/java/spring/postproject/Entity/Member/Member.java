@@ -1,8 +1,9 @@
-package spring.postproject.Member.Entity;
+package spring.postproject.Entity.Member;
 
 import lombok.*;
-import spring.postproject.Post.Entity.Comment;
-import spring.postproject.Post.Entity.Post;
+import spring.postproject.Entity.Common.EntityDate;
+import spring.postproject.Entity.Post.Comment;
+import spring.postproject.Entity.Post.Post;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,9 +14,9 @@ import java.util.List;
 @Getter
 @Builder
 @AllArgsConstructor
-public class Member {
+public class Member extends EntityDate {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
 

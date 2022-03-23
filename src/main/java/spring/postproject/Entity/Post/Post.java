@@ -1,19 +1,21 @@
-package spring.postproject.Post.Entity;
+package spring.postproject.Entity.Post;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import spring.postproject.Member.Entity.Member;
+import lombok.*;
+import spring.postproject.Entity.Common.EntityDate;
+import spring.postproject.Entity.Member.Member;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
-public class Post {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor
+public class Post extends EntityDate {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
     private Long id;
 
@@ -27,6 +29,7 @@ public class Post {
     private Long price;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
