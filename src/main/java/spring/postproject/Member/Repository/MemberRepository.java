@@ -1,7 +1,7 @@
-package spring.postproject.Repository.Member;
+package spring.postproject.Member.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import spring.postproject.Entity.Member.Member;
+import spring.postproject.Member.Entity.Member;
 
 import java.util.Optional;
 

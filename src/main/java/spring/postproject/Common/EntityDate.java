@@ -1,4 +1,4 @@
-package spring.postproject.Entity.Common;
+package spring.postproject.Common;
 
 
 import lombok.Getter;

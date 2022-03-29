@@ -1,4 +1,4 @@
-package spring.postproject.Entity.Member;
+package spring.postproject.Member.Entity;
 
 public enum MemberRoll {
     NORMAL,ADMIN
