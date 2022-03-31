@@ -26,8 +26,8 @@ public class MemberTest {
     public void constructor(){
         assertThat(member).isNotNull();
         assertThat(member.getUserId()).isEqualTo("niceId");
-        assertThat(member.getNickName()).isEqualTo("kingHamzzi");
-        assertThat(member.getPassWord()).isEqualTo("password");
+        assertThat(member.getNickname()).isEqualTo("kingHamzzi");
+        assertThat(member.getPassword()).isEqualTo("password");
     }
 
     @DisplayName("닉네임이 변경가능 해야한다")
@@ -35,15 +35,15 @@ public class MemberTest {
     public void canChangeNickName() {
         String newNickName = "HamzziKing";
         member.updateNickName(newNickName);
-        assertThat(member.getNickName()).isEqualTo(newNickName);
+        assertThat(member.getNickname()).isEqualTo(newNickName);
     }
 
     @DisplayName("비밀번호가 변경가능 해야한다")
     @Test
     public void canChangePassWord() {
         String newPassWord = "newPassWord";
-        member.updatePassWord(newPassWord);
-        assertThat(member.getPassWord()).isEqualTo(newPassWord);
+        member.updatePassword(newPassWord);
+        assertThat(member.getPassword()).isEqualTo(newPassWord);
     }
 
     @DisplayName("등급이 변경가능해야한다")
@@ -59,7 +59,7 @@ public class MemberTest {
     @Test
     public void validationPassWord() {
         //비밀번호 변경시 에러
-        assertThatThrownBy(() -> member.updatePassWord("1234567891011121314151617181920"))
+        assertThatThrownBy(() -> member.updatePassword("1234567891011121314151617181920"))
                 .isInstanceOf(ExceptionBoard.INVALID_LENGTH.getException().getClass());
 
         //Member 생성시 에러

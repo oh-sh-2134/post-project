@@ -27,10 +27,10 @@ public class Member extends EntityDate {
     private String userId;
 
     @Column(nullable = false, length = 20,unique = true)
-    private String nickName;
+    private String nickname;
 
     @Column(nullable = false, length = 20)
-    private String passWord;
+    private String password;
 
     @Enumerated(EnumType.STRING)
     private MemberRoll memberRoll;
@@ -43,27 +43,27 @@ public class Member extends EntityDate {
 
 
     public void updateNickName(String nickname){
-        validationNickName(nickname);
-        this.nickName = nickname;
+        validationNickname(nickname);
+        this.nickname = nickname;
     }
 
-    public void updatePassWord(String password){
-        validationPassWord(password);
-        this.passWord = password;
+    public void updatePassword(String password){
+        validationPassword(password);
+        this.password = password;
     }
 
     public void updateRole(MemberRoll memberRoll){
         this.memberRoll = memberRoll;
     }
 
-    public void validationNickName(String nickName){
+    public void validationNickname(String nickName){
         if(nickName.isBlank()|| nickName.length() > MAX_LENGTH_NICKNAME){
             throw ExceptionBoard.INVALID_LENGTH.getException();
         }
     }
 
-    public void validationPassWord(String passWord){
-        if(passWord.isBlank()|| passWord.length() > MAX_LENGTH_PASSWORD){
+    public void validationPassword(String password){
+        if(password.isBlank()|| password.length() > MAX_LENGTH_PASSWORD){
             throw ExceptionBoard.INVALID_LENGTH.getException();
         }
     }
@@ -79,11 +79,11 @@ public class Member extends EntityDate {
 
     @Builder
     public Member(String userId, String nickName, String passWord){
-        validationNickName(nickName);
-        validationPassWord(passWord);
+        validationNickname(nickName);
+        validationPassword(passWord);
         this.userId = userId;
-        this.nickName = nickName;
-        this.passWord = passWord;
+        this.nickname = nickName;
+        this.password = passWord;
     }
 
 }
