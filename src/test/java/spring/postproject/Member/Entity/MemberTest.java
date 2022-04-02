@@ -83,7 +83,7 @@ public class MemberTest {
         return Member.builder()
                 .userId(userId)
                 .nickName(nickName)
-                .passWord(passWord)
+                .password(passWord)
                 .build();
     }
 }

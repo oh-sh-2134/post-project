@@ -11,32 +11,31 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class MemberService {
 
     private final MemberRepository memberRepository;
 
     // 회원가입
+    @Transactional
     public Member signUp(Member member){
         return memberRepository.save(member);
     }
 
     //닉네임으로 찾기
     public Member findByNickName(String nickName){
-        Optional<Member> findMember = memberRepository.findByNickName(nickName);
-        Member member = findMember.orElseThrow(ExceptionBoard.NOT_FOUNT_MEMBER::getException);
-        return member;
-
+        Optional<Member> findMember = memberRepository.findByNickname(nickName);
+        return findMember.orElseThrow(ExceptionBoard.NOT_FOUNT_MEMBER::getException);
     }
 
     //로그인
     public Member checkUserValidation(String userId,String password){
         Optional<Member> findMember = memberRepository.findByUserIdAndPassword(userId, password);
-        Member member = findMember.orElseThrow(ExceptionBoard.NOT_FOUNT_MEMBER::getException);
-        return member;
+        return findMember.orElseThrow(ExceptionBoard.NOT_FOUNT_MEMBER::getException);
     }
 
     //계정 탈퇴
+    @Transactional
     public void withdraw (Member member, String password){
         if (!member.getPassword().equals(password)){
             throw ExceptionBoard.INVALID_PASSWORD.getException();

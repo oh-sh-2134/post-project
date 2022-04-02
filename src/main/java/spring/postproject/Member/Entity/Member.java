@@ -1,6 +1,7 @@
 package spring.postproject.Member.Entity;
 
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 import spring.postproject.Common.EntityDate;
 import spring.postproject.Post.Entity.Comment;
 import spring.postproject.Post.Entity.Post;
@@ -19,7 +20,7 @@ public class Member extends EntityDate {
     private static final int MAX_LENGTH_NICKNAME = 20;
     private static final int MAX_LENGTH_PASSWORD = 20;
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "member_id")
     private Long id;
 
@@ -78,12 +79,12 @@ public class Member extends EntityDate {
 
 
     @Builder
-    public Member(String userId, String nickName, String passWord){
+    public Member(String userId, String nickName, String password){
         validationNickname(nickName);
-        validationPassword(passWord);
+        validationPassword(password);
         this.userId = userId;
         this.nickname = nickName;
-        this.password = passWord;
+        this.password = password;
     }
 
 }
