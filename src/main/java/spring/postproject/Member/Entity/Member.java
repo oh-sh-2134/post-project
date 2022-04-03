@@ -1,16 +1,14 @@
 package spring.postproject.Member.Entity;
 
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
 import spring.postproject.Common.EntityDate;
-import spring.postproject.Post.Entity.Comment;
+import spring.postproject.Comment.Entitiy.Comment;
 import spring.postproject.Post.Entity.Post;
 import spring.postproject.Excetion.ExceptionBoard;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,7 +18,7 @@ public class Member extends EntityDate {
     private static final int MAX_LENGTH_NICKNAME = 20;
     private static final int MAX_LENGTH_PASSWORD = 20;
 
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
 

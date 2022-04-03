@@ -5,10 +5,12 @@ import spring.postproject.Member.Entity.Member;
 
 import java.util.Optional;
 
+
 public interface MemberRepository extends JpaRepository<Member,Long> {
 
 
-    Optional<Member> findByNickName(String nickName);
+    Optional<Member> findByNickname(String nickName);
     Optional<Member> findByUserIdAndPassword(String userId, String Password);
+    //Optional<Member> findById(Long id);
 
 }

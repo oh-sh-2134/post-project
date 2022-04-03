@@ -1,8 +1,9 @@
-package spring.postproject.Post.Entity;
+package spring.postproject.Comment.Entitiy;
 
 import lombok.*;
 import spring.postproject.Common.EntityDate;
 import spring.postproject.Member.Entity.Member;
+import spring.postproject.Post.Entity.Post;
 
 import javax.persistence.*;
 
