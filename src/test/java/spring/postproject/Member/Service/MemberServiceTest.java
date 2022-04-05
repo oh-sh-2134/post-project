@@ -5,6 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import spring.postproject.Excetion.ExceptionBoard;
@@ -17,17 +19,16 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-
-@SpringBootTest
-@Transactional
+//
+//@SpringBootTest
+//@Transactional
+@DataJpaTest
+//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class MemberServiceTest {
 
 
     @Autowired
     MemberService memberService;
-
-    @Autowired
-    MemberRepository memberRepository;
 
     private Member member;
 
@@ -46,7 +47,7 @@ class MemberServiceTest {
         Member findMember = memberService.findByNickName(member.getNickname());
 
         //then
-        assertThat(findMember.getNickname()).isEqualTo(member.getNickname());
+        assertThat(member).isEqualTo(findMember);
     }
 
     @DisplayName("회원 탈퇴를 하면 조회가 불가능하다")
@@ -59,8 +60,21 @@ class MemberServiceTest {
         memberService.withdraw(member,member.getPassword());
 
         //then
-        assertThatThrownBy(()-> memberRepository.findByNickname(member.getNickname()))
+        assertThatThrownBy(()-> memberService.findByNickName(member.getNickname()))
                 .isInstanceOf(ExceptionBoard.NOT_FOUNT_MEMBER.getException().getClass());
+    }
+
+    @DisplayName("로그인이 가능할까")
+    @Test
+    public void checkUserValidationTest(){
+        //given
+        memberService.signUp(member);
+
+        //when
+        Member validateMember = memberService.checkUserValidation(member.getUserId(),member.getPassword());
+
+        //then
+        assertThat(member).isEqualTo(validateMember);
     }
 
 
