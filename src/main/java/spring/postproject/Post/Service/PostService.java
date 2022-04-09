@@ -9,7 +9,10 @@ import spring.postproject.Member.Entity.Member;
 import spring.postproject.Member.Repository.MemberRepository;
 import spring.postproject.Member.Service.MemberService;
 import spring.postproject.Post.Entity.Post;
+import spring.postproject.Post.PostDto.PostDto;
 import spring.postproject.Post.Repository.PostRepository;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,10 +24,28 @@ public class PostService {
     private final MemberRepository memberRepository;
 
 
-    public Long save(Post post, Long memberId){
+    public Long save(PostDto postDto, Long memberId){
         Member member = memberRepository.findById(memberId).orElseThrow(ExceptionBoard.NOT_FOUNT_MEMBER::getException);
-        post.checkWriter(post.getMember(),member);
-        postRepository.save(post);
+        Post post = postDto.toEntity();
+        post.setMember(member);
         return post.getId();
+    }
+
+    public Long update(Long id,PostDto postDto){
+        Post findPost = postRepository.findById(id).orElseThrow();
+        findPost.update(postDto);
+        return findPost.getId();
+    }
+
+    public void delete(Long id, Member member){
+        Post post = postRepository.findById(id).orElseThrow();
+        if (!member.isAdmin() || !post.checkWriter(member)) {
+            return;
+        }
+        postRepository.delete(post);
+    }
+
+    public List<Post> findAll(){
+        return postRepository.findAll();
     }
 }

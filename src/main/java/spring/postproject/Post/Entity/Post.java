@@ -5,6 +5,7 @@ import spring.postproject.Comment.Entitiy.Comment;
 import spring.postproject.Common.EntityDate;
 import spring.postproject.Excetion.ExceptionBoard;
 import spring.postproject.Member.Entity.Member;
+import spring.postproject.Post.PostDto.PostDto;
 
 import javax.persistence.*;
 import java.util.List;
@@ -34,6 +35,12 @@ public class Post extends EntityDate {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList;
 
+    public Long setMember(Member member){
+        this.member = member;
+        return member.getId();
+    }
+
+
     public void validContent(String content){
         if(content.length() >MAX_CONTENT_LENGTH || content.isBlank()){
             throw ExceptionBoard.INVALID_CONTENT.getException();
@@ -46,8 +53,13 @@ public class Post extends EntityDate {
         }
     }
 
-    public boolean checkWriter(Member member1,Member member2){
-        return member1.isSameMember(member2);
+    public boolean checkWriter(Member member){
+        return this.member.isSameMember(member);
+    }
+
+    public void update(PostDto postDto) {
+        this.title = postDto.toEntity().title;
+        this.content = postDto.toEntity().content;
     }
 
     @Builder
@@ -64,4 +76,6 @@ public class Post extends EntityDate {
         this.member = member;
         member.getPostList().add(this);
     }
+
+
 }

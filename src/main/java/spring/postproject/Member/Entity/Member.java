@@ -75,6 +75,9 @@ public class Member extends EntityDate {
         return this.id.equals(id);
     }
 
+    public boolean isAdmin() {
+        return this.memberRoll.equals(MemberRoll.ADMIN);
+    }
 
     @Builder
     public Member(String userId, String nickName, String password){
