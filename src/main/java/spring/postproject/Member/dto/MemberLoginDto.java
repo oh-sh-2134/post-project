@@ -1,10 +1,12 @@
 package spring.postproject.Member.dto;
 
 
+import lombok.Getter;
 import spring.postproject.Member.Entity.Member;
 
 import javax.validation.constraints.NotBlank;
 
+@Getter
 public class MemberLoginDto {
     private String id;
     private String password;
