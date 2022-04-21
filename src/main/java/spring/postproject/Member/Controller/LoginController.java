@@ -1,11 +1,13 @@
 package spring.postproject.Member.Controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import spring.postproject.Member.Entity.Member;
+import spring.postproject.Member.Service.MemberService;
 import spring.postproject.Member.Service.SessionLoginServiceImpl;
 import spring.postproject.Member.dto.MemberCreateDto;
 import spring.postproject.Member.dto.MemberLoginDto;
@@ -20,25 +22,30 @@ import javax.validation.Valid;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class LoginController {
 
     private final SessionLoginServiceImpl loginService;
+    private final String login = "login";
+    private final MemberService memberService;
 
     @GetMapping("/")
-    public String loginForm(Model model){
+    public String loginForm(@SessionAttribute(name = login,required = false)Member member,
+            Model model){
+        log.info("loginForm");
+        if(member != null){
+            model.addAttribute("member",member);
+            return "member/memberInfo";
+        }
         model.addAttribute("memberLoginDto",new MemberLoginDto());
         return "member/loginForm";
     }
 
-    @GetMapping("/member/new")
-    public String createMember(Model model){
-        model.addAttribute("memberCreateDto",new MemberCreateDto());
-        return "member/createMember";
-    }
-
     @PostMapping("/")
     public String login(@Valid MemberLoginDto memberLoginDto, BindingResult result,
-                        HttpServletRequest request){
+                        HttpServletRequest request, Model model){
+        log.info("login");
+
         if (result.hasErrors()) {
             return "member/loginForm";
         }
@@ -53,48 +60,45 @@ public class LoginController {
         //세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성
         HttpSession session = request.getSession();
         //세션에 로그인 회원 정보 보관
-        session.setAttribute(SessionConst.LOGIN_MEMBER.toString(), loginMember);
+        session.setAttribute(login, loginMember);
+        log.info("session id : " + session.getId());
 
+        model.addAttribute("member",loginMember);
         return "/member/memberInfo";
     }
 
-    @PostMapping("/member/new")
-    public String create(@Valid MemberCreateDto memberCreateDto, BindingResult result){
+    @GetMapping("/member/new")
+    public String createMember(Model model){
+        log.info("createMember");
+        model.addAttribute(new MemberCreateDto());
         return "member/createMember";
+    }
+
+    @PostMapping("/member/new")
+    public String create(@Valid @RequestParam MemberCreateDto memberCreateDto, BindingResult result){
+        log.info(memberCreateDto.getNickname() + memberCreateDto.getUserId() + memberCreateDto.getPassword());
+
+        if (result.hasErrors()) {
+            return "member/createMember";
+        }
+        log.info("create");
+        Member member = Member.builder()
+                .userId(memberCreateDto.getUserId())
+                .password(memberCreateDto.getPassword())
+                .nickName(memberCreateDto.getNickname())
+                .build();
+        memberService.signUp(member);
+        log.info("create ok" + member.getNickname());
+
+        return "member/loginForm";
     }
 
 
     @GetMapping("/member/memberInfo")
-    public String memberInfo(){
-
+    public String memberInfo(@RequestParam("member")Member member,Model model){
+        log.info("member info : " + member.getNickname());
+        model.addAttribute("data",member.getNickname());
         return "member/memberInfo";
-    }
-
-
-    @PostMapping("/login")
-    public String login2(@Valid @ModelAttribute MemberLoginDto form, BindingResult bindingResult,
-                          @RequestParam(defaultValue = "/") String redirectURL,
-                          HttpServletRequest request) {
-
-        if (bindingResult.hasErrors()) {
-            return "login/loginForm";
-        }
-
-        Member loginMember = loginService.login(form.getUserId(), form.getPassword());
-
-        if (loginMember == null) {
-            bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
-            return "login/loginForm";
-        }
-
-        //로그인 성공 처리
-        //세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성
-        HttpSession session = request.getSession();
-        //세션에 로그인 회원 정보 보관
-        session.setAttribute(SessionConst.LOGIN_MEMBER.toString(), loginMember);
-
-        return "redirect:" + redirectURL;
-
     }
 
     @PostMapping("/logout")

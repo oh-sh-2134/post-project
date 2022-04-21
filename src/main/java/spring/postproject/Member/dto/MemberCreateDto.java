@@ -17,6 +17,5 @@ public class MemberCreateDto {
     @NotBlank(message = "패스워드를 입력해 주세요.")
     private String password;
 
-    private MemberRoll memberRoll;
 }
 
