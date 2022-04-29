@@ -3,11 +3,13 @@ package spring.postproject.Member.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import spring.postproject.Member.Entity.Member;
 
 import javax.validation.constraints.NotBlank;
 
 @Getter
+@Setter
 public class MemberLoginDto {
 
     @NotBlank(message = "잘못된 로그인 입니다.")

@@ -3,11 +3,13 @@ package spring.postproject.Member.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import spring.postproject.Member.Entity.MemberRoll;
 
 import javax.validation.constraints.NotBlank;
 
 @Getter
+@Setter
 public class MemberCreateDto {
 
     @NotBlank(message = "닉네임을 입력해 주세요.")

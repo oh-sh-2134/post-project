@@ -34,7 +34,7 @@ public class LoginController {
             Model model){
         log.info("loginForm");
         if(member != null){
-            model.addAttribute("member",member);
+            model.addAttribute("data",member.getNickname());
             return "member/memberInfo";
         }
         model.addAttribute("memberLoginDto",new MemberLoginDto());
@@ -44,8 +44,8 @@ public class LoginController {
     @PostMapping("/")
     public String login(@Valid MemberLoginDto memberLoginDto, BindingResult result,
                         HttpServletRequest request, Model model){
-        log.info("login");
-
+        log.info("login : ");
+        log.info(memberLoginDto.getUserId() + memberLoginDto.getPassword());
         if (result.hasErrors()) {
             return "member/loginForm";
         }
@@ -63,19 +63,19 @@ public class LoginController {
         session.setAttribute(login, loginMember);
         log.info("session id : " + session.getId());
 
-        model.addAttribute("member",loginMember);
+        model.addAttribute("data",loginMember.getNickname());
         return "/member/memberInfo";
     }
 
     @GetMapping("/member/new")
     public String createMember(Model model){
         log.info("createMember");
-        model.addAttribute(new MemberCreateDto());
+        model.addAttribute("memberCreateDto",new MemberCreateDto());
         return "member/createMember";
     }
 
     @PostMapping("/member/new")
-    public String create(@Valid @RequestParam MemberCreateDto memberCreateDto, BindingResult result){
+    public String create(@Valid MemberCreateDto memberCreateDto, BindingResult result){
         log.info(memberCreateDto.getNickname() + memberCreateDto.getUserId() + memberCreateDto.getPassword());
 
         if (result.hasErrors()) {
@@ -88,9 +88,9 @@ public class LoginController {
                 .nickName(memberCreateDto.getNickname())
                 .build();
         memberService.signUp(member);
-        log.info("create ok" + member.getNickname());
+        log.info("create ok : " + member.getNickname());
 
-        return "member/loginForm";
+        return "redirect:/";
     }
 
 
