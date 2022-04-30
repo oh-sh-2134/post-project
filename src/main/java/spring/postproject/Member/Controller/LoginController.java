@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import spring.postproject.Member.Entity.Member;
+import spring.postproject.Member.Entity.MemberRoll;
 import spring.postproject.Member.Service.MemberService;
 import spring.postproject.Member.Service.SessionLoginServiceImpl;
 import spring.postproject.Member.dto.MemberCreateDto;
@@ -34,7 +35,7 @@ public class LoginController {
             Model model){
         log.info("loginForm");
         if(member != null){
-            model.addAttribute("data",member.getNickname());
+            model.addAttribute("member",member);
             return "member/memberInfo";
         }
         model.addAttribute("memberLoginDto",new MemberLoginDto());
@@ -63,7 +64,7 @@ public class LoginController {
         session.setAttribute(login, loginMember);
         log.info("session id : " + session.getId());
 
-        model.addAttribute("data",loginMember.getNickname());
+        model.addAttribute("member",loginMember);
         return "/member/memberInfo";
     }
 
@@ -87,6 +88,7 @@ public class LoginController {
                 .password(memberCreateDto.getPassword())
                 .nickName(memberCreateDto.getNickname())
                 .build();
+        member.updateRole(MemberRoll.NORMAL);
         memberService.signUp(member);
         log.info("create ok : " + member.getNickname());
 
@@ -94,26 +96,22 @@ public class LoginController {
     }
 
 
-    @GetMapping("/member/memberInfo")
+    //@GetMapping("/member/memberInfo")
     public String memberInfo(@RequestParam("member")Member member,Model model){
         log.info("member info : " + member.getNickname());
-        model.addAttribute("data",member.getNickname());
+        model.addAttribute("member",member);
         return "member/memberInfo";
     }
 
-    @PostMapping("/logout")
-    public String logoutV3(HttpServletRequest request) {
+    @GetMapping("/member/logout")
+    public String logout(HttpServletRequest request) {
+        log.info("logout");
         // getSession(false) 를 사용해야 함 (세션이 없더라도 새로 생성하면 안되기 때문)
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
         }
+        log.info("session delete success");
         return "redirect:/";
-    }
-
-    private void expireCookie(HttpServletResponse response, String cookieName) {
-        Cookie cookie = new Cookie(cookieName, null);
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
     }
 }
