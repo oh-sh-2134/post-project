@@ -18,7 +18,7 @@ public class Member extends EntityDate {
     private static final int MAX_LENGTH_NICKNAME = 20;
     private static final int MAX_LENGTH_PASSWORD = 20;
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "member_id")
     private Long id;
 
@@ -89,3 +89,5 @@ public class Member extends EntityDate {
     }
 
 }
+
+
