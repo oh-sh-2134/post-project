@@ -58,8 +58,8 @@ public class Post extends EntityDate {
     }
 
     public void update(PostDto postDto) {
-        this.title = postDto.toEntity().title;
-        this.content = postDto.toEntity().content;
+        this.title = postDto.getTitle();
+        this.content = postDto.getContent();
     }
 
     @Builder

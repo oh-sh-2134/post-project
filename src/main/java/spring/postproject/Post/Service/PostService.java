@@ -26,7 +26,7 @@ public class PostService {
 
     public Long save(PostDto postDto, Long memberId){
         Member member = memberRepository.findById(memberId).orElseThrow(ExceptionBoard.NOT_FOUNT_MEMBER::getException);
-        Post post = postDto.toEntity();
+        Post post = new Post(postDto.getTitle(),postDto.getContent(),member);
         post.setMember(member);
         return post.getId();
     }
