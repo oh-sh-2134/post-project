@@ -12,6 +12,7 @@ import spring.postproject.Member.Service.MemberService;
 import spring.postproject.Member.Service.SessionLoginServiceImpl;
 import spring.postproject.Member.dto.MemberCreateDto;
 import spring.postproject.Member.dto.MemberLoginDto;
+import spring.postproject.Post.Entity.Post;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -54,7 +56,7 @@ public class LoginController {
 
         if (loginMember == null) {
             result.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
-            return "login/loginForm";
+            return "member/loginForm";
         }
 
         //로그인 성공 처리
@@ -65,7 +67,9 @@ public class LoginController {
         log.info("session id : " + session.getId());
 
         model.addAttribute("member",loginMember);
-        return "/member/memberInfo";
+        List<Post> posts = loginMember.getPostList();
+        model.addAttribute("post",posts);
+        return "/post/home";
     }
 
     @GetMapping("/member/new")
