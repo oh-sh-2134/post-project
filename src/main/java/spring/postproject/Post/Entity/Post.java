@@ -12,13 +12,13 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Post extends EntityDate {
 
     private final static int MAX_CONTENT_LENGTH = 500;
     private final static int MAX_TITLE_LENGTH = 50;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "post_id")
     private Long id;
 
@@ -63,12 +63,11 @@ public class Post extends EntityDate {
     }
 
     @Builder
-    public Post(String title, String content, Member member) {
+    public Post(String title, String content) {
         validContent(content);
         validTitle(title);
         this.title = title;
         this.content = content;
-        this.member = member;
     }
 
     //연관관계 메소드

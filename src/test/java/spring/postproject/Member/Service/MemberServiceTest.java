@@ -19,11 +19,9 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-//
-//@SpringBootTest
-//@Transactional
-@DataJpaTest
-//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+
+@SpringBootTest
+@Transactional
 class MemberServiceTest {
 
 
@@ -61,18 +59,19 @@ class MemberServiceTest {
 
         //then
         assertThatThrownBy(()-> memberService.findByNickName(member.getNickname()))
-                .isInstanceOf(ExceptionBoard.NOT_FOUNT_MEMBER.getException().getClass());
+                .isInstanceOf(ExceptionBoard.NOT_FOUND_MEMBER.getException().getClass());
     }
 
     @DisplayName("로그인이 가능할까")
     @Test
     public void checkUserValidationTest(){
+
         //given
         memberService.signUp(member);
 
         //when
         Member validateMember = memberService.checkUserValidation(member.getUserId(),member.getPassword());
-
+        
         //then
         assertThat(member).isEqualTo(validateMember);
     }

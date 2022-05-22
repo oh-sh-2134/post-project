@@ -1,5 +1,6 @@
 package spring.postproject.Post.PostDto;
 
+import lombok.Builder;
 import lombok.Data;
 import spring.postproject.Post.Entity.Post;
 
@@ -13,4 +14,9 @@ public class PostDto {
     @NotBlank(message = "잘못된 내용입니다.")
     private String content;
 
+
+    public void toDto(Post post) {
+        this.title = post.getTitle();
+        this.content = post.getContent();
+    }
 }

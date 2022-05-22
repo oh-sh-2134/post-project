@@ -2,6 +2,7 @@ package spring.postproject.Post.Service;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.postproject.Excetion.ExceptionBoard;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 @Transactional
 public class PostService {
 
@@ -23,18 +25,15 @@ public class PostService {
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
 
-
-    public Long save(PostDto postDto, Long memberId){
-        Member member = memberRepository.findById(memberId).orElseThrow(ExceptionBoard.NOT_FOUNT_MEMBER::getException);
-        Post post = new Post(postDto.getTitle(),postDto.getContent(),member);
-        post.setMember(member);
-        return post.getId();
+    public Post create(Post post){
+        post.addMember(post.getMember());
+        return postRepository.save(post);
     }
 
-    public Long update(Long id,PostDto postDto){
+    public Post update(Long id,PostDto postDto){
         Post findPost = postRepository.findById(id).orElseThrow();
         findPost.update(postDto);
-        return findPost.getId();
+        return findPost;
     }
 
     public void delete(Long id, Member member){
@@ -45,6 +44,10 @@ public class PostService {
         postRepository.delete(post);
     }
 
+    @Transactional(readOnly = true)
+    public Post findOne(Long id){ return postRepository.findById(id).orElseThrow(ExceptionBoard.NOT_FOUND_POST::getException); }
+
+    @Transactional(readOnly = true)
     public List<Post> findAll(){
         return postRepository.findAll();
     }

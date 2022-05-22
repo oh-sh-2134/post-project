@@ -38,10 +38,12 @@ public class LoginController {
         log.info("loginForm");
         if(member != null){
             model.addAttribute("member",member);
-            return "member/memberInfo";
+            List<Post> posts = member.getPostList();
+            model.addAttribute("post",posts);
+            return "/post/home";
         }
         model.addAttribute("memberLoginDto",new MemberLoginDto());
-        return "member/loginForm";
+        return "/member/loginForm";
     }
 
     @PostMapping("/")
@@ -92,8 +94,12 @@ public class LoginController {
                 .password(memberCreateDto.getPassword())
                 .nickName(memberCreateDto.getNickname())
                 .build();
+        log.info("member id : " + member.getId());
+
         member.updateRole(MemberRoll.NORMAL);
         memberService.signUp(member);
+        log.info("member id : " + member.getId());
+
         log.info("create ok : " + member.getNickname());
 
         return "redirect:/";

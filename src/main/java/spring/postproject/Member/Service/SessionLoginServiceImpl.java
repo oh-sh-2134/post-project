@@ -14,7 +14,7 @@ public class SessionLoginServiceImpl implements LoginService{
 
     @Override
     public Member login(String id, String password) {
-        return memberRepository.findByUserIdAndPassword(id, password).orElseThrow(ExceptionBoard.NOT_FOUNT_MEMBER::getException);
+        return memberRepository.findByUserIdAndPassword(id, password).orElseThrow(ExceptionBoard.NOT_FOUND_MEMBER::getException);
     }
 
     @Override
