@@ -48,7 +48,7 @@ class MemberRepositoryTest {
 //                .orElseThrow(()-> {throw ExceptionBoard.NOT_FOUNT_MEMBER.getException();});
 
         Member findMember = memberRepository.findByNickname(member.getNickname())
-                .orElseThrow(ExceptionBoard.NOT_FOUNT_MEMBER::getException);
+                .orElseThrow(ExceptionBoard.NOT_FOUND_MEMBER::getException);
 
         assertThat(member.getNickname()).isEqualTo(findMember.getNickname());
     }

@@ -13,6 +13,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
+@Setter
 public class Post extends EntityDate {
 
     private final static int MAX_CONTENT_LENGTH = 500;
@@ -36,6 +37,7 @@ public class Post extends EntityDate {
     private List<Comment> commentList;
 
     public Long setMember(Member member){
+        member.getPostList().add(this);
         this.member = member;
         return member.getId();
     }
@@ -57,9 +59,10 @@ public class Post extends EntityDate {
         return this.member.isSameMember(member);
     }
 
-    public void update(PostDto postDto) {
+    public Post update(PostDto postDto) {
         this.title = postDto.getTitle();
         this.content = postDto.getContent();
+        return this;
     }
 
     @Builder
