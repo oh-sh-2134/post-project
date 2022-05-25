@@ -33,13 +33,18 @@ public class LoginController {
     private final MemberService memberService;
 
     @GetMapping("/")
-    public String loginForm(@SessionAttribute(name = login,required = false)Member member,
-            Model model){
+    public String loginForm(@SessionAttribute(name = login,required = false)Long memberId, Model model){
         log.info("loginForm");
-        if(member != null){
+        if(memberId != null){
+            Member member = memberService.findOne(memberId);
             model.addAttribute("member",member);
             List<Post> posts = member.getPostList();
             model.addAttribute("post",posts);
+            for (Post post : posts) {
+                log.info("post : " + post);
+                log.info("post id : " + post.getId() + " post title : " + post.getTitle() + " post content : " + post.getContent());
+            }
+
             return "/post/home";
         }
         model.addAttribute("memberLoginDto",new MemberLoginDto());
@@ -65,7 +70,7 @@ public class LoginController {
         //세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성
         HttpSession session = request.getSession();
         //세션에 로그인 회원 정보 보관
-        session.setAttribute(login, loginMember);
+        session.setAttribute(login, loginMember.getId());
         log.info("session id : " + session.getId());
 
         model.addAttribute("member",loginMember);
@@ -107,7 +112,7 @@ public class LoginController {
 
 
     //@GetMapping("/member/memberInfo")
-    public String memberInfo(@RequestParam("member")Member member,Model model){
+    public String memberInfo(@RequestParam(value = "member",required = false)Member member,Model model){
         log.info("member info : " + member.getNickname());
         model.addAttribute("member",member);
         return "member/memberInfo";

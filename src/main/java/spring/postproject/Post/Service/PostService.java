@@ -18,22 +18,27 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@Transactional
 public class PostService {
 
 
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
 
-    public Post create(Post post){
-        post.addMember(post.getMember());
+    @Transactional
+    public Post create(Post post, Long memberId){
+        post.setMember(memberRepository.findById(memberId).orElseThrow(ExceptionBoard.NOT_FOUND_MEMBER::getException));
         return postRepository.save(post);
     }
 
+    @Transactional
     public Post update(Long id,PostDto postDto){
-        Post findPost = postRepository.findById(id).orElseThrow();
-        findPost.update(postDto);
-        return findPost;
+        Post post = postRepository.findById(id).orElseThrow();
+        log.info("post id : " + post.getId() + " post title : " + post.getTitle() + " post content : " + post.getContent() + " find id");
+        post.setTitle(postDto.getTitle());
+        post.setContent(postDto.getContent());
+        log.info("post id : " + post.getId() + " post title : " + post.getTitle() + " post content : " + post.getContent() + " after update");
+        return post;
+
     }
 
     public void delete(Long id, Member member){

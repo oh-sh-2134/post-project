@@ -26,13 +26,13 @@ public class MemberService {
     //닉네임으로 찾기
     public Member findByNickName(String nickName){
         Optional<Member> findMember = memberRepository.findByNickname(nickName);
-        return findMember.orElseThrow(ExceptionBoard.NOT_FOUNT_MEMBER::getException);
+        return findMember.orElseThrow(ExceptionBoard.NOT_FOUND_MEMBER::getException);
     }
 
     //로그인
     public Member checkUserValidation(String userId,String password){
         Optional<Member> findMember = memberRepository.findByUserIdAndPassword(userId, password);
-        return findMember.orElseThrow(ExceptionBoard.NOT_FOUNT_MEMBER::getException);
+        return findMember.orElseThrow(ExceptionBoard.NOT_FOUND_MEMBER::getException);
     }
 
     //계정 탈퇴
@@ -43,4 +43,10 @@ public class MemberService {
         }
         memberRepository.delete(member);
     }
+
+    public Member findOne(Long id){
+        return memberRepository.findById(id).orElseThrow(ExceptionBoard.NOT_FOUND_MEMBER::getException);
+    }
+
+
 }
