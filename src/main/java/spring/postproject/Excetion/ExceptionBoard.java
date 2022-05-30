@@ -13,8 +13,8 @@ public enum ExceptionBoard {
 
 
 
-    NOT_FOUNT_MEMBER(new NotFoundException("사용자를 찾을 수 없습니다.",600)),
-
+    NOT_FOUND_MEMBER(new NotFoundException("사용자를 찾을 수 없습니다.",600)),
+    NOT_FOUND_POST(new NotFoundException("게시글을 찾을 수 없습니다.",600)),
     //길이 오류
     INVALID_LENGTH(new BadRequestException("잘못된 길이입니다.",601)),
     INVALID_PASSWORD(new BadRequestException("잘못된 비밀번호 입니다.",602)),
