@@ -21,7 +21,7 @@ public class MemberTest {
         member = createMember("niceId","kingHamzzi","password");
     }
 
-    @DisplayName("객체생성이 빌더 패턴으로 생성된다.")
+    @DisplayName("Member 객체생성이 빌더 패턴으로 생성된다.")
     @Test
     public void constructor(){
         assertThat(member).isNotNull();
@@ -54,10 +54,21 @@ public class MemberTest {
         member.updateRole(MemberRoll.NORMAL);
         assertThat(member.getMemberRoll()).isEqualTo(MemberRoll.NORMAL);
     }
+    @DisplayName("비밀번호가 비어있으면 에러가 난다")
+    @Test
+    public void validationPassWordBlank() {
+        //비밀번호 변경시 에러
+        assertThatThrownBy(() -> member.updatePassword(""))
+                .isInstanceOf(ExceptionBoard.INVALID_LENGTH.getException().getClass());
+
+        //Member 생성시 에러
+        assertThatThrownBy(() -> createMember("id", "name", ""))
+                .isInstanceOf(ExceptionBoard.INVALID_LENGTH.getException().getClass());
+    }
 
     @DisplayName("비밀번호 길이가 20자리 이상이면 에러가 난다")
     @Test
-    public void validationPassWord() {
+    public void validationPassWordLengthOver() {
         //비밀번호 변경시 에러
         assertThatThrownBy(() -> member.updatePassword("1234567891011121314151617181920"))
                 .isInstanceOf(ExceptionBoard.INVALID_LENGTH.getException().getClass());
@@ -67,15 +78,27 @@ public class MemberTest {
                 .isInstanceOf(ExceptionBoard.INVALID_LENGTH.getException().getClass());
     }
 
-    @DisplayName("닉네임의 길이가 20자리 이상이면 에러가 난다")
+    @DisplayName("닉네임이 비어있으면 에러가 난다")
     @Test
-    public void validationNickName() {
-        //비밀번호 변경시 에러
-        assertThatThrownBy(() -> member.updateNickName("1234567891011121314151617181920"))
+    public void validationNickNameBlank() {
+        //닉네임 변경시 에러
+        assertThatThrownBy(() -> member.updateNickName(""))
                 .isInstanceOf(ExceptionBoard.INVALID_LENGTH.getException().getClass());
 
         //Member 생성시 에러
-        assertThatThrownBy(() -> createMember("id", "1234567891012345678910", "password"))
+        assertThatThrownBy(() -> createMember("id", "", "password"))
+                .isInstanceOf(ExceptionBoard.INVALID_LENGTH.getException().getClass());
+    }
+
+    @DisplayName("닉네임의 길이가 20자리 이상이면 에러가 난다")
+    @Test
+    public void validationNickNameLengthOver() {
+        //닉네임 변경시 에러
+        assertThatThrownBy(() -> member.updateNickName("123456789101112131564654as65e4151617181920"))
+                .isInstanceOf(ExceptionBoard.INVALID_LENGTH.getException().getClass());
+
+        //Member 생성시 에러
+        assertThatThrownBy(() -> createMember("id", "123456789101112131564654as65e4151617181920", "password"))
                 .isInstanceOf(ExceptionBoard.INVALID_LENGTH.getException().getClass());
     }
 

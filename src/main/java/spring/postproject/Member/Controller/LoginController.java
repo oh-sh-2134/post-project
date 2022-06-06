@@ -14,13 +14,9 @@ import spring.postproject.Member.dto.MemberCreateDto;
 import spring.postproject.Member.dto.MemberLoginDto;
 import spring.postproject.Post.Entity.Post;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.servlet.http.Cookie;
+
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -33,10 +29,11 @@ public class LoginController {
     private final MemberService memberService;
 
     @GetMapping("/")
-    public String loginForm(@SessionAttribute(name = login,required = false)Long memberId, Model model){
+    public String loginForm(@SessionAttribute(name = login,required = false)Member member, Model model){
         log.info("loginForm");
-        if(memberId != null){
-            Member member = memberService.findOne(memberId);
+//        log.info("member id : " + memberId);
+        if(member != null){
+//            Member member = memberService.findOne(memberId);
             model.addAttribute("member",member);
             List<Post> posts = member.getPostList();
             model.addAttribute("post",posts);
@@ -52,7 +49,7 @@ public class LoginController {
     }
 
     @PostMapping("/")
-    public String login(@Valid MemberLoginDto memberLoginDto, BindingResult result,
+    public String login(MemberLoginDto memberLoginDto, BindingResult result,
                         HttpServletRequest request, Model model){
         log.info("login : ");
         log.info(memberLoginDto.getUserId() + memberLoginDto.getPassword());
@@ -87,7 +84,7 @@ public class LoginController {
     }
 
     @PostMapping("/member/new")
-    public String create(@Valid MemberCreateDto memberCreateDto, BindingResult result){
+    public String create(MemberCreateDto memberCreateDto, BindingResult result){
         log.info(memberCreateDto.getNickname() + memberCreateDto.getUserId() + memberCreateDto.getPassword());
 
         if (result.hasErrors()) {

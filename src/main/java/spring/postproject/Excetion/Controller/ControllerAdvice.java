@@ -14,22 +14,25 @@ import spring.postproject.Excetion.Dto.ExceptionResponse;
 @RestControllerAdvice
 public class ControllerAdvice {
 
+    //400
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionResponse BadRequestExceptionHandler(BadRequestException e) {
         return new ExceptionResponse(e.getMessage(), e.getCode());
     }
 
+    //404
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ExceptionResponse handleNotFoundException(NotFoundException e) {
         return new ExceptionResponse(e.getMessage(), e.getCode());
     }
 
-    //@Valid 유효성을 통과하지 못하면 발생하는 에러
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        return new ExceptionResponse(e.getMessage(), HttpStatus.BAD_REQUEST.value());
+    //500
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ExceptionResponse handleException(Exception e) {
+        return new ExceptionResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
+
 }

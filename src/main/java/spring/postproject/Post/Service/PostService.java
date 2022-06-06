@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import spring.postproject.Excetion.BaseException.CustomException;
 import spring.postproject.Excetion.ExceptionBoard;
 import spring.postproject.Member.Entity.Member;
 import spring.postproject.Member.Repository.MemberRepository;
@@ -18,39 +19,30 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class PostService {
 
 
     private final PostRepository postRepository;
-    private final MemberRepository memberRepository;
 
-    @Transactional
-    public Post create(Post post, Long memberId){
-        post.setMember(memberRepository.findById(memberId).orElseThrow(ExceptionBoard.NOT_FOUND_MEMBER::getException));
+    public Post create(Post post, Member member){
+        post.setMember(member);
         return postRepository.save(post);
     }
 
-    @Transactional
+    //더티체킹으로 업데이트 하도록 함
     public Post update(Long id,PostDto postDto){
-        Post post = postRepository.findById(id).orElseThrow();
-        log.info("post id : " + post.getId() + " post title : " + post.getTitle() + " post content : " + post.getContent() + " find id");
-        post.setTitle(postDto.getTitle());
-        post.setContent(postDto.getContent());
-        log.info("post id : " + post.getId() + " post title : " + post.getTitle() + " post content : " + post.getContent() + " after update");
+        Post post = postRepository.findById(id).orElseThrow(ExceptionBoard.NOT_FOUND_POST::getException);
+        post.update(postDto);
         return post;
-
     }
 
-    public void delete(Long id, Member member){
-        Post post = postRepository.findById(id).orElseThrow();
-        if (!member.isAdmin() || !post.checkWriter(member)) {
-            return;
-        }
+    public void delete(Long id){
+        Post post = postRepository.findById(id).orElseThrow(ExceptionBoard.NOT_FOUND_POST::getException);
         postRepository.delete(post);
     }
 
-    @Transactional(readOnly = true)
-    public Post findOne(Long id){ return postRepository.findById(id).orElseThrow(ExceptionBoard.NOT_FOUND_POST::getException); }
+    public Post findOne(Long id){ return postRepository.findById(id).orElseThrow(ExceptionBoard.NOT_FOUND_POST::getException).counting(); }
 
     @Transactional(readOnly = true)
     public List<Post> findAll(){

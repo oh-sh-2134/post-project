@@ -10,12 +10,13 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Entity
 public class Member extends EntityDate {
 
-    private static final int MAX_LENGTH_NICKNAME = 20;
+    private static final int MAX_LENGTH_NICKNAME = 30;
     private static final int MAX_LENGTH_PASSWORD = 20;
 
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -67,17 +68,6 @@ public class Member extends EntityDate {
         }
     }
 
-    public boolean isSameMember(Member member) {
-        return this.id.equals(member.id);
-    }
-
-    public boolean isSameMember(Long id) {
-        return this.id.equals(id);
-    }
-
-    public boolean isAdmin() {
-        return this.memberRoll.equals(MemberRoll.ADMIN);
-    }
 
     @Builder
     public Member(String userId, String nickName, String password){
@@ -87,6 +77,7 @@ public class Member extends EntityDate {
         this.nickname = nickName;
         this.password = password;
     }
+
 
 }
 

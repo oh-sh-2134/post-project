@@ -12,8 +12,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
-@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post extends EntityDate {
 
     private final static int MAX_CONTENT_LENGTH = 500;
@@ -29,6 +28,8 @@ public class Post extends EntityDate {
     @Column(nullable = false)
     private String content;
 
+    private int count;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -36,6 +37,7 @@ public class Post extends EntityDate {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList;
 
+    //연관관계 매핑
     public Long setMember(Member member){
         member.getPostList().add(this);
         this.member = member;
@@ -45,21 +47,19 @@ public class Post extends EntityDate {
 
     public void validContent(String content){
         if(content.length() >MAX_CONTENT_LENGTH || content.isBlank()){
-            throw ExceptionBoard.INVALID_CONTENT.getException();
+            throw ExceptionBoard.INVALID_LENGTH.getException();
         }
     }
 
     public void validTitle(String title){
         if (title.length() > MAX_TITLE_LENGTH ||title.isBlank()){
-            throw ExceptionBoard.INVALID_TITLE.getException();
+            throw ExceptionBoard.INVALID_LENGTH.getException();
         }
     }
 
-    public boolean checkWriter(Member member){
-        return this.member.isSameMember(member);
-    }
-
     public Post update(PostDto postDto) {
+        validTitle(postDto.getTitle());
+        validContent(postDto.getContent());
         this.title = postDto.getTitle();
         this.content = postDto.getContent();
         return this;
@@ -71,13 +71,12 @@ public class Post extends EntityDate {
         validTitle(title);
         this.title = title;
         this.content = content;
+        this.count = 0;
     }
 
-    //연관관계 메소드
-    public void addMember(Member member) {
-        this.member = member;
-        member.getPostList().add(this);
+    public Post counting(){
+        this.count += 1;
+        return this;
     }
-
-
 }
+
