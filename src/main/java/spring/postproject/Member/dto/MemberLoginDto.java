@@ -2,13 +2,17 @@ package spring.postproject.Member.dto;
 
 
 import lombok.*;
-import spring.postproject.Member.Entity.Member;
-
-import javax.validation.constraints.NotBlank;
 
 @Data
+@NoArgsConstructor
 public class MemberLoginDto {
 
     private String userId;
     private String password;
+
+    @Builder
+    public MemberLoginDto(String userId, String password) {
+        this.userId = userId;
+        this.password = password;
+    }
 }
