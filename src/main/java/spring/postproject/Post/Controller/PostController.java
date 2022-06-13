@@ -75,12 +75,7 @@ public class PostController {
     }
 
     @PostMapping("/post/{postId}/update")
-    public String update(@PathVariable("postId") Long postId,PostDto postDto, BindingResult result, Model model){
-        if (result.hasErrors()) {
-            model.addAttribute("postDto",postDto);
-            model.addAttribute("postId",postId);
-            return "post/postUpdate";
-        }
+    public String update(@PathVariable("postId") Long postId,PostDto postDto, Model model){
         Post post = postService.update(postId, postDto);
         log.info("post : " + post);
         log.info("post id : " + post.getId() + " post title : " + post.getTitle() + " post content : " + post.getContent());

@@ -80,7 +80,7 @@ public class LoginController {
     public String createMember(Model model){
         log.info("createMember");
         model.addAttribute("memberCreateDto",new MemberCreateDto());
-        return "member/createMember";
+        return "member/memberCreate";
     }
 
     @PostMapping("/member/new")
@@ -88,7 +88,7 @@ public class LoginController {
         log.info(memberCreateDto.getNickname() + memberCreateDto.getUserId() + memberCreateDto.getPassword());
 
         if (result.hasErrors()) {
-            return "member/createMember";
+            return "member/memberCreate";
         }
         log.info("create");
         Member member = Member.builder()
