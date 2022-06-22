@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+
 @Controller
 @RequiredArgsConstructor
 @Slf4j
@@ -28,7 +29,7 @@ public class LoginController {
     private final String login = "login";
     private final MemberService memberService;
 
-    @GetMapping("/")
+    @GetMapping("/login")
     public String loginForm(@SessionAttribute(name = login,required = false)Member member, Model model){
         log.info("loginForm");
 //        log.info("member id : " + memberId);
@@ -42,13 +43,13 @@ public class LoginController {
                 log.info("post id : " + post.getId() + " post title : " + post.getTitle() + " post content : " + post.getContent());
             }
 
-            return "/post/home";
+            return "redirect:/";
         }
-        model.addAttribute("memberLoginDto",new MemberLoginDto());
+//        model.addAttribute("memberLoginDto",new MemberLoginDto());
         return "/member/loginForm";
     }
 
-    @PostMapping("/")
+//    @PostMapping("/login")
     public String login(MemberLoginDto memberLoginDto, BindingResult result,
                         HttpServletRequest request, Model model){
         log.info("login : ");
@@ -73,7 +74,7 @@ public class LoginController {
         model.addAttribute("member",loginMember);
         List<Post> posts = loginMember.getPostList();
         model.addAttribute("post",posts);
-        return "/post/home";
+        return "redirect:/";
     }
 
     @GetMapping("/member/new")
@@ -108,11 +109,11 @@ public class LoginController {
     }
 
 
-    //@GetMapping("/member/memberInfo")
-    public String memberInfo(@RequestParam(value = "member",required = false)Member member,Model model){
-        log.info("member info : " + member.getNickname());
-        model.addAttribute("member",member);
-        return "member/memberInfo";
+    @GetMapping("/member/Info")
+    public String memberInfo(Model model){
+        //log.info("member info : " + member.getNickname());
+        //model.addAttribute("member",member);
+        return "login";
     }
 
     @GetMapping("/member/logout")

@@ -10,15 +10,20 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import spring.postproject.config.Security.Service.UserDetailServiceImpl;
 
 import javax.sql.DataSource;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity //기본필터체인등록
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private DataSource dataSource;
+
+
+    @Autowired
+    private UserDetailServiceImpl userDetailService;
 
     // 정적 자원에 대해서는 Security 설정을 적용하지 않음.
     @Override
@@ -29,21 +34,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
-                    // /about 요청에 대해서는 로그인을 요구함
-                    .antMatchers("/post").authenticated()
+                    // /post 요청에 대해서는 로그인을 요구함
+                    .antMatchers("/post/**").authenticated()
                     // /admin 요청에 대해서는 ROLE_ADMIN 역할을 가지고 있어야 함
-//                    .antMatchers("/admin").hasRole("ADMIN")
+//                    .antMatchers("/post/**").hasRole("NORMAL")
                     // 나머지 요청에 대해서는 로그인을 요구하지 않음
                     .anyRequest().permitAll()
                     .and()
                 // 로그인하는 경우에 대해 설정함
                 .formLogin()
                     // 로그인 페이지를 제공하는 URL을 설정함
-                    .loginPage("/member/loginForm")
+                    .loginPage("/login")
+                    //securityUserDetails 타입으로 IoC되어 있는 loadUserByUsername 호출
+                    .loginProcessingUrl("/login")
                     // 로그인 성공 URL을 설정함
-                    .successForwardUrl("/post/home")
+                    .successForwardUrl("/")
                     // 로그인 실패 URL을 설정함
-                    .failureForwardUrl("/member/loginForm")
+                    //.failureForwardUrl("/login")
                     .permitAll()
                     .and()
                 .logout()
@@ -56,14 +63,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .jdbcAuthentication()
-                .dataSource(dataSource)
-                .withDefaultSchema()
-                .withUser("user").password("password").roles("USER").and()
-                .withUser("admin").password("password").roles("USER", "ADMIN");
-    }
+//    @Autowired
+//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//        auth
+//                .jdbcAuthentication()
+//                .dataSource(dataSource)
+//                .withDefaultSchema()
+//                .withUser("user").password("password").roles("USER").and()
+//                .withUser("admin").password("password").roles("USER", "ADMIN");
+//    }
 
 }
