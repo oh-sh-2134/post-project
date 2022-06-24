@@ -3,6 +3,8 @@ package spring.postproject.config.Security.model;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Delegate;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import spring.postproject.Member.Entity.Member;
@@ -11,22 +13,21 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Getter
-public class securityUserDetails implements UserDetails {
+@Slf4j
+public class SecurityUserDetails implements UserDetails {
 
 
     private Member member;
 
-    public securityUserDetails(Member member) {
+    public SecurityUserDetails(Member member) {
         this.member = member;
     }
-
-
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collection = new ArrayList<>();
         collection.add((GrantedAuthority) () -> member.getMemberRoll().toString());
+        log.info(member.getMemberRoll().toString());
         return collection;
     }
 
