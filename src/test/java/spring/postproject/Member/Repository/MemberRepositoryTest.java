@@ -26,6 +26,11 @@ class MemberRepositoryTest {
     @Autowired
     MemberRepository memberRepository;
 
+    @DisplayName("Bean이 잘 띄워지는지 확인")
+    @Test
+    public void MemberRepositoryNotNull(){
+        assertThat(memberRepository).isNotNull();
+    }
 
     @DisplayName("save 테스트")
     @Test
