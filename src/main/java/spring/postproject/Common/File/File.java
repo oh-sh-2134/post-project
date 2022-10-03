@@ -1,9 +1,10 @@
-package spring.postproject.Post.Entity;
+package spring.postproject.Common.File;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import spring.postproject.Post.Entity.Post;
 
 import javax.persistence.*;
 
@@ -25,6 +26,10 @@ public class File {
     @Column(nullable = false)
     private String filePath;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
+    private Post post;
+
     @Builder
     public File(Long id, String origFilename, String filename, String filePath) {
         this.origFilename = origFilename;
@@ -32,5 +37,8 @@ public class File {
         this.filePath = filePath;
     }
 
+    public void setPost(Post post){
+        this.post = post;
+    }
 
 }

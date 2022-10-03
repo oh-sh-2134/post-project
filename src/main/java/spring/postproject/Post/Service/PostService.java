@@ -2,31 +2,37 @@ package spring.postproject.Post.Service;
 
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import spring.postproject.Excetion.BaseException.CustomException;
+import org.springframework.web.multipart.MultipartFile;
+import spring.postproject.Common.File.FileHandler;
 import spring.postproject.Excetion.ExceptionBoard;
 import spring.postproject.Member.Entity.Member;
 import spring.postproject.Member.Repository.MemberRepository;
-import spring.postproject.Member.Service.MemberService;
 import spring.postproject.Post.Entity.Post;
 import spring.postproject.Post.PostDto.PostDto;
 import spring.postproject.Post.Repository.PostRepository;
+import spring.postproject.config.Security.model.MemberAdaptor;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 @Transactional
 public class PostService {
 
 
     private final PostRepository postRepository;
+    private final MemberRepository memberRepository;
+    private final FileHandler fileHandler;
 
-    public Post create(Post post, Member member){
-        post.setMember(member);
+
+    public Post create(Post post, Long memberId, List<MultipartFile> files) throws IOException {
+        post.addFileList(fileHandler.convertMultipartFilesFileList(files));
+        post.setMember(memberRepository.findById(memberId).orElseThrow(ExceptionBoard.NOT_FOUND_MEMBER::getException));
         return postRepository.save(post);
     }
 

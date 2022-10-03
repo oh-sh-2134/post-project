@@ -2,14 +2,12 @@ package spring.postproject.Excetion;
 
 
 import lombok.Getter;
-import spring.postproject.Excetion.BaseException.BadRequestException;
-import spring.postproject.Excetion.BaseException.CustomException;
-import spring.postproject.Excetion.BaseException.InternalServerException;
-import spring.postproject.Excetion.BaseException.NotFoundException;
+import spring.postproject.Excetion.BaseException.*;
 
 
 @Getter
 public enum ExceptionBoard {
+
 
 
 
@@ -21,7 +19,8 @@ public enum ExceptionBoard {
     INVALID_PASSWORD(new BadRequestException("잘못된 비밀번호 입니다.",404)),
     INVALID_CONTENT(new BadRequestException("잘못된 형식의 컨텐츠입니다.",404)),
     INVALID_TITLE(new BadRequestException("잘못된 형식의 타이틀입니다.",404)),
-    INTERNAL_SERVER(new InternalServerException("서버를 찾을 수 없습니다.", 500));
+    INTERNAL_SERVER(new InternalServerException("서버를 찾을 수 없습니다.", 500)),
+    FILE_UPLOAD_FAILURE(new FileUploadFailureException("파일을 저장하는데 실패했습니다.",500));
 
     private final CustomException exception;
 
