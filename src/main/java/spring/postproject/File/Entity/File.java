@@ -1,4 +1,4 @@
-package spring.postproject.Common.File;
+package spring.postproject.File.Entity;
 
 import lombok.AccessLevel;
 import lombok.Builder;

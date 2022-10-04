@@ -10,7 +10,7 @@ public enum ExceptionBoard {
 
 
 
-
+    NOT_FOUND_FILE(new NotFoundException("파일을 찾을 수 없습니다.",400)),
     NOT_FOUND_MEMBER(new NotFoundException("사용자를 찾을 수 없습니다.",400)),
     NOT_FOUND_POST(new NotFoundException("게시글을 찾을 수 없습니다.",400)),
     NOT_FOUND_COMMENT(new NotFoundException("댓글을 찾을 수 없습니다.",400)),

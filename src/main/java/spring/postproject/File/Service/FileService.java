@@ -1,9 +1,13 @@
-package spring.postproject.Common.File;
+package spring.postproject.File.Service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import spring.postproject.Post.Entity.Post;
+import spring.postproject.Excetion.ExceptionBoard;
+import spring.postproject.File.Entity.File;
+import spring.postproject.File.Repository.FileRepository;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -12,9 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Component
-public class FileHandler {
+@Service
+@RequiredArgsConstructor
+public class FileService {
 
+    final private FileRepository fileRepository;
 
     public List<File> convertMultipartFilesFileList(List<MultipartFile> multipartFiles) throws IOException {
         //반환될 파일 리스트
@@ -47,6 +53,11 @@ public class FileHandler {
         }
         return fileList;
 
+    }
+
+    @Transactional
+    public File findFile(Long id){
+        return fileRepository.findByFileId(id).orElseThrow(ExceptionBoard.NOT_FOUND_FILE::getException);
     }
 
 
