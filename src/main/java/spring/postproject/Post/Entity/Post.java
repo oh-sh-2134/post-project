@@ -3,11 +3,13 @@ package spring.postproject.Post.Entity;
 import lombok.*;
 import spring.postproject.Comment.Entitiy.Comment;
 import spring.postproject.Common.EntityDate;
+import spring.postproject.File.Entity.File;
 import spring.postproject.Excetion.ExceptionBoard;
 import spring.postproject.Member.Entity.Member;
 import spring.postproject.Post.PostDto.PostDto;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -37,12 +39,16 @@ public class Post extends EntityDate {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<File> fileList;
+
     //연관관계 매핑
     public Long setMember(Member member){
         member.getPostList().add(this);
         this.member = member;
         return member.getId();
     }
+
 
 
     public void validContent(String content){
@@ -66,12 +72,20 @@ public class Post extends EntityDate {
     }
 
     @Builder
-    public Post(String title, String content) {
+    public Post(String title, String content, List<File> files) {
         validContent(content);
         validTitle(title);
         this.title = title;
         this.content = content;
         this.count = 0;
+        this.fileList = new ArrayList<>();
+    }
+
+    public void addFileList(List<File> files){
+        for (File file : files) {
+            file.setPost(this);
+        }
+        this.fileList = files;
     }
 
     public Post counting(){

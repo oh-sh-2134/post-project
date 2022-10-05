@@ -1,7 +1,6 @@
 package spring.postproject.File.Service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,8 +24,6 @@ public class FileService {
     public List<File> convertMultipartFilesFileList(List<MultipartFile> multipartFiles) throws IOException {
         //반환될 파일 리스트
         List<File> fileList = new ArrayList<>();
-
-
 
         String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files";
 
@@ -57,8 +54,13 @@ public class FileService {
 
     @Transactional
     public File findFile(Long id){
-        return fileRepository.findByFileId(id).orElseThrow(ExceptionBoard.NOT_FOUND_FILE::getException);
+        return fileRepository.findById(id).orElseThrow(ExceptionBoard.NOT_FOUND_FILE::getException);
     }
 
+    public void fileDelete(List<File> fileList){
+        for (File file : fileList) {
+            new java.io.File(file.getFilePath()+ "\\" + file.getFilename()).delete();
+        }
+    }
 
 }

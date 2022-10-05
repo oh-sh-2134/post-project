@@ -6,5 +6,5 @@ import spring.postproject.File.Entity.File;
 import java.util.Optional;
 
 public interface FileRepository extends JpaRepository<File,Long> {
-    Optional<File> findByFileId(Long id);
+    Optional<File> findById(Long id);
 }

@@ -100,12 +100,12 @@ public class PostController {
     }
 
     @PostMapping("/post/{postId}/update")
-    public String update(@PathVariable("postId") Long postId, @Valid PostDto postDto, BindingResult result, Model model) {
+    public String update(@PathVariable("postId") Long postId, @Valid PostDto postDto, BindingResult result, Model model,List<MultipartFile> files) throws IOException {
         if(result.hasErrors()){
             model.addAttribute("postId",postId);
             return "post/postUpdate";
         }
-        Post post = postService.update(postId, postDto);
+        Post post = postService.update(postId, postDto,files);
         log.info("post : " + post);
         log.info("post id : " + post.getId() + " post title : " + post.getTitle() + " post content : " + post.getContent());
         return "redirect:/";
