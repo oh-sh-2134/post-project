@@ -27,6 +27,8 @@ public class Comment extends EntityDate {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    private String content;
+
     //연관관계 메소드
     public void addMember(Member member){
         this.member = member;
