@@ -38,7 +38,7 @@ public class PostService {
         Post post = postRepository.findById(id).orElseThrow(ExceptionBoard.NOT_FOUND_POST::getException);
 
         //dir에서 파일 삭제
-        fileService.fileDelete(post.getFileList());
+        fileService.deleteFiles(post.getFileList());
         //post에서 엔티티 제거
         for (File file : post.getFileList()) {
             post.getFileList().remove(file);
@@ -51,7 +51,7 @@ public class PostService {
 
     public void delete(Long id){
         Post post = postRepository.findById(id).orElseThrow(ExceptionBoard.NOT_FOUND_POST::getException);
-        fileService.fileDelete(post.getFileList());
+        fileService.deleteFiles(post.getFileList());
         postRepository.delete(post);
     }
 

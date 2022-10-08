@@ -96,6 +96,7 @@ public class PostController {
         postDto.toDto(post);
         model.addAttribute("postDto", postDto);
         model.addAttribute("postId", postId);
+        model.addAttribute("fileList",post.getFileList());
         return "post/postUpdate";
     }
 
