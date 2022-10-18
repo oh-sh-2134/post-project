@@ -2,6 +2,7 @@ package spring.postproject.Member.Controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,6 +18,7 @@ import spring.postproject.Post.Entity.Post;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -30,7 +32,8 @@ public class LoginController {
     private final MemberService memberService;
 
     @GetMapping("/login")
-    public String loginForm(@SessionAttribute(name = login,required = false)Member member, Model model){
+//    public String loginForm(@SessionAttribute(name = login,required = false)Member member, Model model){
+    public String loginForm(@AuthenticationPrincipal(expression = "#this == 'anonymousUser' ? null : member") Member member, Model model){
         log.info("loginForm");
 //        log.info("member id : " + memberId);
         if(member != null){
@@ -49,7 +52,7 @@ public class LoginController {
         return "/member/loginForm";
     }
 
-//    @PostMapping("/login")
+//    @PostMapping("/auth/login")
     public String login(MemberLoginDto memberLoginDto, BindingResult result,
                         HttpServletRequest request, Model model){
         log.info("login : ");
@@ -85,7 +88,7 @@ public class LoginController {
     }
 
     @PostMapping("/member/new")
-    public String create(MemberCreateDto memberCreateDto, BindingResult result){
+    public String create(@Valid MemberCreateDto memberCreateDto, BindingResult result, Model model){
         log.info(memberCreateDto.getNickname() + memberCreateDto.getUserId() + memberCreateDto.getPassword());
 
         if (result.hasErrors()) {
@@ -99,13 +102,13 @@ public class LoginController {
                 .build();
         log.info("member id : " + member.getId());
 
-        member.updateRole(MemberRoll.NORMAL);
+        member.updateRole(MemberRoll.ROLE_NORMAL);
         memberService.signUp(member);
         log.info("member id : " + member.getId());
 
         log.info("create ok : " + member.getNickname());
 
-        return "redirect:/";
+        return "/member/loginForm";
     }
 
 

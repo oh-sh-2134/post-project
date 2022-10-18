@@ -17,7 +17,7 @@ import java.util.List;
 public class Member extends EntityDate {
 
     private static final int MAX_LENGTH_NICKNAME = 30;
-    private static final int MAX_LENGTH_PASSWORD = 20;
+//    private static final int MAX_LENGTH_PASSWORD = 50;
 
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "member_id")
@@ -29,7 +29,7 @@ public class Member extends EntityDate {
     @Column(nullable = false, length = 20,unique = true)
     private String nickname;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -48,7 +48,7 @@ public class Member extends EntityDate {
     }
 
     public void updatePassword(String password){
-        validationPassword(password);
+//        validationPassword(password);
         this.password = password;
     }
 
@@ -62,17 +62,17 @@ public class Member extends EntityDate {
         }
     }
 
-    public void validationPassword(String password){
-        if(password.isBlank()|| password.length() > MAX_LENGTH_PASSWORD){
-            throw ExceptionBoard.INVALID_LENGTH.getException();
-        }
-    }
+//    public void validationPassword(String password){
+//        if(password.isBlank()|| password.length() > MAX_LENGTH_PASSWORD){
+//            throw ExceptionBoard.INVALID_LENGTH.getException();
+//        }
+//    }
 
 
     @Builder
     public Member(String userId, String nickName, String password){
         validationNickname(nickName);
-        validationPassword(password);
+//        validationPassword(password);
         this.userId = userId;
         this.nickname = nickName;
         this.password = password;
