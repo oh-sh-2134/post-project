@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import spring.postproject.Excetion.BaseException.CustomException;
 import spring.postproject.Excetion.ExceptionBoard;
 import spring.postproject.File.Entity.File;
 import spring.postproject.File.Repository.FileRepository;
@@ -52,15 +53,34 @@ public class FileService {
 
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public File findFile(Long id){
         return fileRepository.findById(id).orElseThrow(ExceptionBoard.NOT_FOUND_FILE::getException);
     }
 
-    public void fileDelete(List<File> fileList){
+//    @Transactional
+//    public void deleteFiles(List<File> fileList){
+//
+//        for (File file : fileList) {
+//            new java.io.File(file.getFilePath()+ "\\" + file.getFilename()).delete();
+//            fileRepository.delete(file);
+//        }
+//    }
+//
+//    @Transactional
+//    public void deleteFileOne(Long id){
+//        File file = fileRepository.findById(id).orElseThrow(ExceptionBoard.NOT_FOUND_FILE::getException);
+//        new java.io.File(file.getFilePath()+ "\\" + file.getFilename()).delete();
+//        fileRepository.delete(file);
+//    }
+    public void deleteFiles(List<File> fileList){
         for (File file : fileList) {
-            new java.io.File(file.getFilePath()+ "\\" + file.getFilename()).delete();
+            deleteFileOne(file);
         }
     }
-
+    public void deleteFileOne(File file){
+        if(!(new java.io.File(file.getFilePath()+ "\\" + file.getFilename()).delete())){
+            throw ExceptionBoard.FILE_DELETE_FAILURE.getException();
+        }
+    }
 }
