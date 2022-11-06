@@ -118,4 +118,10 @@ public class PostController {
         return "redirect:/";
     }
 
+    @PostMapping("/deleteFile")
+    public String boardFileDelete(@RequestParam Long fileId, @RequestParam Long postId){
+        postService.deleteFile(fileId, postId);
+        //게시판 파일삭제
+        return "redirect:/post/" + postId  + "/update";
+    }
 }

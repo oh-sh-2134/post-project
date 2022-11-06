@@ -38,12 +38,5 @@ public class FileController {
                 .body(urlResource);
     }
 
-    @PostMapping("/deleteFile")
-    public String boardFileDelete(@RequestParam Long fileId, @RequestParam Long postId){
-
-        //게시판 파일삭제
-        fileService.deleteFileOne(fileId);
-        return "redirect:/post/" + postId  + "/update";
-    }
 
 }

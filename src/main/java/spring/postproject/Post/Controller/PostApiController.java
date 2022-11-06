@@ -13,8 +13,11 @@ import spring.postproject.Excetion.ExceptionBoard;
 import spring.postproject.Member.Entity.Member;
 import spring.postproject.config.Security.Annotation.CurrentMember;
 
+import javax.annotation.Resource;
 import javax.validation.constraints.NotBlank;
 import javax.websocket.server.PathParam;
+import java.io.File;
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,5 +43,7 @@ public class PostApiController {
         commentService.delete(comment);
 //        return new ResponseEntity(HttpStatus.OK);
     }
+
+
 
 }
