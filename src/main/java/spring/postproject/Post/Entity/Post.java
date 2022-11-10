@@ -84,8 +84,8 @@ public class Post extends EntityDate {
     public void addFileList(List<File> files){
         for (File file : files) {
             file.setPost(this);
+            this.fileList.add(file);
         }
-        this.fileList = files;
     }
 
     public Post counting(){
