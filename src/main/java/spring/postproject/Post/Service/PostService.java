@@ -14,6 +14,7 @@ import spring.postproject.Post.Entity.Post;
 import spring.postproject.Post.PostDto.PostDto;
 import spring.postproject.Post.Repository.PostRepository;
 
+import javax.validation.constraints.Null;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -40,15 +41,17 @@ public class PostService {
     public Post update(Long id,PostDto postDto, List<MultipartFile> files) throws IOException{
         Post post = postRepository.findById(id).orElseThrow(ExceptionBoard.NOT_FOUND_POST::getException);
 
-        //dir에서 파일 삭제
-        fileService.deleteFiles(post.getFileList());
-        //post에서 엔티티 제거
-        for (File file : post.getFileList()) {
-            post.getFileList().remove(file);
-        }
+//        //dir에서 파일 삭제
+//        fileService.deleteFiles(post.getFileList());
+//        //post에서 엔티티 제거
+//        for (File file : post.getFileList()) {
+//            post.getFileList().remove(file);
+//        }
 
         post.update(postDto);
+
         post.addFileList(fileService.convertMultipartFilesFileList(files));
+
         return post;
     }
 
