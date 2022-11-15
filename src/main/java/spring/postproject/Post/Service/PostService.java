@@ -11,7 +11,9 @@ import spring.postproject.File.Service.FileService;
 import spring.postproject.Excetion.ExceptionBoard;
 import spring.postproject.Member.Repository.MemberRepository;
 import spring.postproject.Post.Entity.Post;
+import spring.postproject.Post.PostDto.PostCreateDto;
 import spring.postproject.Post.PostDto.PostDto;
+import spring.postproject.Post.PostDto.PostUpdateDto;
 import spring.postproject.Post.Repository.PostRepository;
 
 import javax.validation.constraints.Null;
@@ -31,14 +33,21 @@ public class PostService {
     private final FileRepository fileRepository;
 
 
-    public Post create(Post post, Long memberId, List<MultipartFile> files) throws IOException {
-        post.addFileList(fileService.convertMultipartFilesFileList(files));
-        post.setMember(memberRepository.findById(memberId).orElseThrow(ExceptionBoard.NOT_FOUND_MEMBER::getException));
+//    public Post create(Post post, Long memberId, List<MultipartFile> files) throws IOException {
+//        post.addFileList(fileService.convertMultipartFilesFileList(files));
+//        post.setMember(memberRepository.findById(memberId).orElseThrow(ExceptionBoard.NOT_FOUND_MEMBER::getException));
+//        return postRepository.save(post);
+//    }
+
+    public Post create(PostCreateDto postCreateDto) throws IOException {
+        Post post = postCreateDto.toEntity();
+        post.addFileList(fileService.convertMultipartFilesFileList(postCreateDto.getFiles()));
+        post.setMember(memberRepository.findById(postCreateDto.getMemberId()).orElseThrow(ExceptionBoard.NOT_FOUND_MEMBER::getException));
         return postRepository.save(post);
     }
 
     //더티체킹으로 업데이트 하도록 함
-    public Post update(Long id,PostDto postDto, List<MultipartFile> files) throws IOException{
+    public Post update(Long id, PostUpdateDto postDto) throws IOException{
         Post post = postRepository.findById(id).orElseThrow(ExceptionBoard.NOT_FOUND_POST::getException);
 
 //        //dir에서 파일 삭제
@@ -49,8 +58,7 @@ public class PostService {
 //        }
 
         post.update(postDto);
-
-        post.addFileList(fileService.convertMultipartFilesFileList(files));
+        post.addFileList(fileService.convertMultipartFilesFileList(postDto.getFiles()));
 
         return post;
     }
@@ -72,11 +80,13 @@ public class PostService {
     }
 
     public void deleteFile(Long fileId, Long postId){
+
         Post post = postRepository.findById(postId).orElseThrow(ExceptionBoard.NOT_FOUND_POST::getException);
         File file = fileRepository.findById(fileId).orElseThrow(ExceptionBoard.NOT_FOUND_FILE::getException);
 //        File findFile = post.getFileList().stream().filter(file -> file.getId().equals(fileId));
-        fileService.deleteFileOne(file);
+        // post에서 Cascade로 삭제 해줌으로써 해당 post에 있지 않은 fileId가 들어와서 삭제 되는 것을 막아줌
         post.getFileList().remove(file);
+        fileService.deleteFileOne(file);
 
 
     }
