@@ -1,6 +1,7 @@
 package spring.postproject.Member.dto;
 
 import lombok.Builder;
+import lombok.Getter;
 import spring.postproject.Comment.dto.CommentInfoDto;
 import spring.postproject.Member.Entity.Member;
 import spring.postproject.Member.Entity.MemberRoll;
@@ -10,6 +11,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import java.util.List;
 
+@Getter
 public class MemberInfoDto {
     private Long id;
 

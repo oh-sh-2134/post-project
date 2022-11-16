@@ -1,14 +1,10 @@
 package spring.postproject.Comment.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import spring.postproject.Comment.Entitiy.Comment;
 
-import javax.validation.constraints.NotBlank;
 
-@Data
+@Getter
 public class CommentInfoDto {
     private Long id;
     private String content;

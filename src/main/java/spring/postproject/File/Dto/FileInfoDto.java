@@ -1,9 +1,11 @@
 package spring.postproject.File.Dto;
 
 import lombok.Builder;
+import lombok.Getter;
 import spring.postproject.File.Entity.File;
 
 
+@Getter
 public class FileInfoDto {
     private Long id;
     private String origFilename;
