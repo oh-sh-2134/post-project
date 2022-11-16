@@ -12,6 +12,7 @@ import spring.postproject.Post.Entity.Post;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class PostInfoDto {
@@ -20,8 +21,8 @@ public class PostInfoDto {
     private String title;
     private String content;
     private MemberInfoDto memberInfoDto;
-    private List<CommentInfoDto> commentInfoDtoList = new LinkedList<>();
-    private List<FileInfoDto> fileInfoDtoList = new LinkedList<>();
+    private List<CommentInfoDto> commentInfoDtoList;
+    private List<FileInfoDto> fileInfoDtoList;
     private int count;
     private LocalDateTime localDateTime;
     @Builder
@@ -30,13 +31,12 @@ public class PostInfoDto {
         this.memberInfoDto = MemberInfoDto.builder().member(post.getMember()).build();
         this.title = post.getTitle();
         this.content = post.getContent();
-        for (Comment comment : post.getCommentList()) {
-            this.commentInfoDtoList.add(CommentInfoDto.builder().comment(comment).build());
-        }
-
-        for (File file : post.getFileList()) {
-            this.fileInfoDtoList.add(FileInfoDto.builder().file(file).build());
-        }
+        this.commentInfoDtoList = post.getCommentList().stream()
+                                        .map(c -> CommentInfoDto.builder().comment(c).build())
+                                        .collect(Collectors.toList());
+        this.fileInfoDtoList = post.getFileList().stream()
+                                    .map(f -> FileInfoDto.builder().file(f).build())
+                                    .collect(Collectors.toList());
         this.count = post.getCount();
         this.localDateTime = post.getModifiedAt();
     }
