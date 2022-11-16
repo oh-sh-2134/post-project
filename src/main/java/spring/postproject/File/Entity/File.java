@@ -4,6 +4,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import spring.postproject.Common.EntityDate;
+import spring.postproject.File.Dto.FileInfoDto;
 import spring.postproject.Post.Entity.Post;
 
 import javax.persistence.*;
@@ -11,7 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-public class File {
+public class File extends EntityDate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
