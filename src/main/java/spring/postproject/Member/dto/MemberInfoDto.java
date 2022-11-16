@@ -32,7 +32,7 @@ public class MemberInfoDto {
     public MemberInfoDto(Member member){
         this.id = member.getId();
         this.userId = member.getUserId();
-        this.nickname = member.getUserId();
+        this.nickname = member.getNickname();
         this.memberRoll = member.getMemberRoll();
     }
 
