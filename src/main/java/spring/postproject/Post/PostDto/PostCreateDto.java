@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import spring.postproject.Post.Entity.Post;
 
 import javax.validation.constraints.NotBlank;
+import java.util.LinkedList;
 import java.util.List;
 
 @Data
@@ -20,7 +21,7 @@ public class PostCreateDto {
 
     private Long memberId;
 
-    private List<MultipartFile> files;
+    private List<MultipartFile> files = new LinkedList<>();
 
 
     public void toDto(Post post) {
