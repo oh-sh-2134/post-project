@@ -5,18 +5,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import spring.postproject.Excetion.ExceptionBoard;
 import spring.postproject.Member.Entity.Member;
-import spring.postproject.Member.Repository.MemberRepository;
 
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 
 
@@ -62,7 +57,7 @@ class MemberServiceTest {
                 .isInstanceOf(ExceptionBoard.NOT_FOUND_MEMBER.getException().getClass());
     }
 
-    @DisplayName("로그인이 가능할까")
+    @DisplayName("로그인이 id와 password가 맞으면 로그인이 되어야 한다.")
     @Test
     public void checkUserValidationTest(){
 

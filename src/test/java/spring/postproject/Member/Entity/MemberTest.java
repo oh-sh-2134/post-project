@@ -49,10 +49,10 @@ public class MemberTest {
     @DisplayName("등급이 변경가능해야한다")
     @Test
     public void canChangeRoll() {
-        member.updateRole(MemberRoll.ADMIN);
-        assertThat(member.getMemberRoll()).isEqualTo(MemberRoll.ADMIN);
-        member.updateRole(MemberRoll.NORMAL);
-        assertThat(member.getMemberRoll()).isEqualTo(MemberRoll.NORMAL);
+        member.updateRole(MemberRoll.ROLE_ADMIN);
+        assertThat(member.getMemberRoll()).isEqualTo(MemberRoll.ROLE_ADMIN);
+        member.updateRole(MemberRoll.ROLE_NORMAL);
+        assertThat(member.getMemberRoll()).isEqualTo(MemberRoll.ROLE_NORMAL);
     }
     @DisplayName("비밀번호가 비어있으면 에러가 난다")
     @Test

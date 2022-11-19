@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import spring.postproject.Comment.Entitiy.Comment;
 import spring.postproject.Comment.dto.CommentSaveDto;
 import spring.postproject.Excetion.BaseException.CustomException;
@@ -17,12 +18,12 @@ import spring.postproject.Excetion.ExceptionBoard;
 import spring.postproject.Member.Entity.Member;
 import spring.postproject.Member.Service.MemberService;
 import spring.postproject.Post.Entity.Post;
+import spring.postproject.Post.PostDto.PostCreateDto;
 import spring.postproject.Post.Service.PostService;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
 public class CommentServiceTest {
@@ -41,9 +42,10 @@ public class CommentServiceTest {
 
     @BeforeEach
     void setMemberAndPost(){
+        MultipartFile file;
         System.out.println("BeforeEach");
         member = memberService.signUp(createMember("userId","nickName","password"));
-        post = postService.create(createPost("comment","Title"),member.getId());
+        post = postService.create(PostCreateDto.builder().content("comment").title("Title").build());
     }
     @DisplayName("Comment save 테스트")
     @Test
@@ -51,7 +53,6 @@ public class CommentServiceTest {
         //given
         CommentSaveDto commentSaveDto = CommentSaveDto.builder()
                 .memberId(member.getId())
-                .postId(post.getId())
                 .content("CommentSaveTest")
                 .build();
 
@@ -76,7 +77,6 @@ public class CommentServiceTest {
         //given
         CommentSaveDto commentSaveDto = CommentSaveDto.builder()
                 .memberId(member.getId())
-                .postId(post.getId())
                 .content("CommentSaveTest")
                 .build();
         Comment comment = commentService.save(commentSaveDto);
