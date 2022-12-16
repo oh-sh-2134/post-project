@@ -1,11 +1,10 @@
 package spring.postproject.Member.dto;
 
-import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import javax.validation.constraints.NotBlank;
 
-import static org.junit.Assert.*;
 
 public class MemberCreateDtoTest {
 

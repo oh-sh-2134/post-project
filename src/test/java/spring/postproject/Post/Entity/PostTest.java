@@ -5,10 +5,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import spring.postproject.Excetion.ExceptionBoard;
 import spring.postproject.Member.Entity.Member;
-import spring.postproject.Post.PostDto.PostDto;
+import spring.postproject.Post.PostDto.PostInfoDto;
+import spring.postproject.Post.PostDto.PostUpdateDto;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.Assert.*;
 
 public class PostTest {
 
@@ -41,11 +41,12 @@ public class PostTest {
     @Test
     public void canChangeTitle(){
         String newTitle = "새로운 타이틀";
-        PostDto postDto = new PostDto();
-        postDto.setTitle(newTitle);
-        postDto.setContent(content);
+        PostUpdateDto postUpdateDto= PostUpdateDto.builder()
+                .title(newTitle)
+                .content(content).build();
 
-        post.update(postDto);
+
+        post.update(postUpdateDto);
 
         assertThat(post.getTitle()).isNotEqualTo(title);
         assertThat(post.getTitle()).isEqualTo(newTitle);
@@ -56,11 +57,12 @@ public class PostTest {
     @Test
     public void canChangeContent() {
         String newContent = "새로운 컨텐츠";
-        PostDto postDto = new PostDto();
-        postDto.setTitle(title);
-        postDto.setContent(newContent);
+        PostUpdateDto postUpdateDto= PostUpdateDto.builder()
+                .title(title)
+                .content(newContent).build();
 
-        post.update(postDto);
+
+        post.update(postUpdateDto);
 
         assertThat(post.getContent()).isNotEqualTo(content);
         assertThat(post.getContent()).isEqualTo(newContent);
@@ -71,11 +73,9 @@ public class PostTest {
     @Test
     public void validationTitleBlank() {
         String invalidIndex = "";
-        PostDto postDto = new PostDto();
-        postDto.setTitle(invalidIndex);
-        postDto.setContent(post.getContent());
+
         //타이틀 변경시 에러
-        assertThatThrownBy(() -> post.update(postDto))
+        assertThatThrownBy(() -> post.update(PostUpdateDto.builder().title(invalidIndex).content("content").build()))
                 .isInstanceOf(ExceptionBoard.INVALID_LENGTH.getException().getClass());
 
         //Post 생성시 에러
@@ -87,11 +87,9 @@ public class PostTest {
     @Test
     public void validationTitleLengthOver() {
         String invalidIndex = "lijeqroijewriojowerijowejrojweorjwejrowejorijweoirjweoiroweqqwesad";
-        PostDto postDto = new PostDto();
-        postDto.setTitle(invalidIndex);
-        postDto.setContent(post.getContent());
+
         //타이틀 변경시 에러
-        assertThatThrownBy(() -> post.update(postDto))
+        assertThatThrownBy(() -> post.update(PostUpdateDto.builder().title(invalidIndex).content("content").build()))
                 .isInstanceOf(ExceptionBoard.INVALID_LENGTH.getException().getClass());
 
         //Post 생성시 에러
@@ -103,11 +101,9 @@ public class PostTest {
     @Test
     public void validationContentBlank() {
         String invalidIndex = "";
-        PostDto postDto = new PostDto();
-        postDto.setTitle(post.getTitle());
-        postDto.setContent(invalidIndex);
+
         //컨텐츠 변경시 에러
-        assertThatThrownBy(() -> post.update(postDto))
+        assertThatThrownBy(() -> post.update(PostUpdateDto.builder().content(invalidIndex).title("title").build()))
                 .isInstanceOf(ExceptionBoard.INVALID_LENGTH.getException().getClass());
 
         //Post 생성시 에러
@@ -115,21 +111,22 @@ public class PostTest {
                 .isInstanceOf(ExceptionBoard.INVALID_LENGTH.getException().getClass());
     }
 
-    @DisplayName("타이틀 길이가 500자리 이상이면 에러가 난다")
+    @DisplayName("컨텐츠 길이가 500자리 이상이면 에러가 난다")
     @Test
     public void validationContentLengthOver() {
         String invalidIndex = "lijeqroijewriojowerijowejrojweorjweasdasdiourhliuojkvjhiuahtlkjwbnthjkasdkuahruloahkwen" +
                 "rlkajsdhkuhvluikzcxkjnfkjasdnkarlahuidlhzskfzkljsdnrkljhsuzkdlrhikulwakjenreaklwejrnlkjrowej" +
-                "alisejoiljeolihurqliweurhikwelirkuhqwluierhliqweuhrlikqwherilkuqwheilruqwhielriorijweoirjweoiroweqqwesad";
-        PostDto postDto = new PostDto();
-        postDto.setTitle(invalidIndex);
-        postDto.setContent(post.getContent());
+                "alisejoiljeolihurqliweurhikwelirkuhqwluierhliqweuhrlikqwherilkuqwheilruqwhielriorijweoirjweoiroweqqwesad"+
+                "lijeqroijewriojowerijowejrojweorjweasdasdiourhliuojkvjhiuahtlkjwbnthjkasdkuahruloahkwen"+
+                "lijeqroijewriojowerijowejrojweorjweasdasdiourhliuojkvjhiuahtlkjwbnthjkasdkuahruloahkwen"+
+                "lijeqroijewriojowerijowejrojweorjweasdasdiourhliuojkvjhiuahtlkjwbnthjkasdkuahruloahkwen";
+
         //타이틀 변경시 에러
-        assertThatThrownBy(() -> post.update(postDto))
+        assertThatThrownBy(() -> post.update(PostUpdateDto.builder().content(invalidIndex).title("title").build()))
                 .isInstanceOf(ExceptionBoard.INVALID_LENGTH.getException().getClass());
 
         //Post 생성시 에러
-        assertThatThrownBy(() -> createPost(invalidIndex, "content"))
+        assertThatThrownBy(() -> createPost(title, invalidIndex))
                 .isInstanceOf(ExceptionBoard.INVALID_LENGTH.getException().getClass());
     }
 

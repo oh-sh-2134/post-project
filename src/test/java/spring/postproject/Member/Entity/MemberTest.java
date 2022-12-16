@@ -54,6 +54,8 @@ public class MemberTest {
         member.updateRole(MemberRoll.ROLE_NORMAL);
         assertThat(member.getMemberRoll()).isEqualTo(MemberRoll.ROLE_NORMAL);
     }
+
+    /* check in security
     @DisplayName("비밀번호가 비어있으면 에러가 난다")
     @Test
     public void validationPassWordBlank() {
@@ -77,6 +79,7 @@ public class MemberTest {
         assertThatThrownBy(() -> createMember("id", "name", "1234567891012345678910"))
                 .isInstanceOf(ExceptionBoard.INVALID_LENGTH.getException().getClass());
     }
+    */
 
     @DisplayName("닉네임이 비어있으면 에러가 난다")
     @Test
