@@ -1,13 +1,14 @@
 package spring.postproject.Member.Service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.postproject.Excetion.ExceptionBoard;
 import spring.postproject.Member.Entity.Member;
 import spring.postproject.Member.Repository.MemberRepository;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 @Service
@@ -16,10 +17,12 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     // 회원가입
     @Transactional
     public Member signUp(Member member){
+        member.updatePassword(bCryptPasswordEncoder.encode(member.getPassword()));
         return memberRepository.save(member);
     }
 
@@ -48,5 +51,12 @@ public class MemberService {
         return memberRepository.findById(id).orElseThrow(ExceptionBoard.NOT_FOUND_MEMBER::getException);
     }
 
+    public Boolean userIdDuplicationCheck(String userId) {
+        return memberRepository.existsByUserId(userId);
+    }
 
+
+    public Boolean nicknameDuplicationCheck(String nickname) {
+        return memberRepository.existsByNickname(nickname);
+    }
 }
