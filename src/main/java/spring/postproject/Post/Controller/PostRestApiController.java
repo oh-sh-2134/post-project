@@ -21,7 +21,7 @@ import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
-public class PostApiController {
+public class PostRestApiController {
 
     private final CommentService commentService;
 
