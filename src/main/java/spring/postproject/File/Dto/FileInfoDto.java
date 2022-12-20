@@ -14,6 +14,7 @@ public class FileInfoDto {
 
     @Builder
     public FileInfoDto(File file){
+        this.id = file.getId();
         this.origFilename = file.getOrigFilename();
         this.filePath = file.getFilePath();
         this.filename = file.getFilename();

@@ -22,7 +22,7 @@ public class FileService {
 
     final private FileRepository fileRepository;
 
-    public List<File> convertMultipartFilesFileList(List<MultipartFile> multipartFiles) throws IOException {
+    public List<File> convertMultipartFilesToFileList(List<MultipartFile> multipartFiles){
         //반환될 파일 리스트
         List<File> fileList = new ArrayList<>();
 
@@ -34,20 +34,25 @@ public class FileService {
             if(multipartFile.isEmpty()){
                 return fileList;
             }
+            try {
+                UUID uuid = UUID.randomUUID();
+                //저장될 fileName
+                String fileName = uuid + "_" + multipartFile.getOriginalFilename();
+                //파일 저장
+                Path saveFilePath = Paths.get(projectPath + "\\" + fileName);
 
-            UUID uuid = UUID.randomUUID();
-            //저장될 fileName
-            String fileName = uuid + "_" + multipartFile.getOriginalFilename();
-            //파일 저장
-            Path saveFilePath = Paths.get(projectPath + "\\" + fileName);
-            multipartFile.transferTo(saveFilePath);
+                multipartFile.transferTo(saveFilePath);
 
-            File file = File.builder()
-                    .origFilename(multipartFile.getOriginalFilename())
-                    .filename(fileName)
-                    .filePath(projectPath)
-                    .build();
-            fileList.add(file);
+                File file = File.builder()
+                        .origFilename(multipartFile.getOriginalFilename())
+                        .filename(fileName)
+                        .filePath(projectPath)
+                        .build();
+                fileList.add(file);
+            }
+            catch (IOException e){
+                throw ExceptionBoard.FILE_UPLOAD_FAILURE.getException();
+            }
         }
         return fileList;
 
