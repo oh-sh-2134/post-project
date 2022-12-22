@@ -10,11 +10,12 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import spring.postproject.config.Security.Filter.CustomAuthenticationFilter;
+import spring.postproject.config.Security.Hadler.CustomLoginFailureHandler;
 import spring.postproject.config.Security.Hadler.CustomLoginSuccessHandler;
 import spring.postproject.config.Security.Service.UserDetailServiceImpl;
 
-import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity //기본필터체인등록
@@ -30,19 +31,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(userDetailService).passwordEncoder(bCryptPasswordEncoder());
-//    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
-                    .antMatchers("/h2-console/**").permitAll()
                     // /post 요청에 대해서는 로그인을 요구함
                     .antMatchers("/post/**").authenticated()
                     // /admin 요청에 대해서는 ROLE_ADMIN 역할을 가지고 있어야 함
-//                    .antMatchers("/post/**").hasRole("NORMAL")
+                    .antMatchers("/post/new").hasRole("NORMAL")
                     // 나머지 요청에 대해서는 로그인을 요구하지 않음
                     .anyRequest().permitAll()
                     .and()
@@ -50,14 +46,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                     // 로그인 페이지를 제공하는 URL을 설정함
                     .loginPage("/login")
-                    //securityUserDetails 타입으로 IoC되어 있는 loadUserByUsername 호출
-//                    .loginProcessingUrl("/login")
-                    // 로그인 성공 URL을 설정함
-//                    .successForwardUrl("/")
-                    // 로그인 실패 URL을 설정함
-                    .failureForwardUrl("/loginFalse")
                     .permitAll()
                     .and()
+                    .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .logout()
                     .permitAll();
     }
@@ -73,29 +64,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManager());
         customAuthenticationFilter.setFilterProcessesUrl("/auth/login");
         customAuthenticationFilter.setAuthenticationSuccessHandler(customLoginSuccessHandler());
-        customAuthenticationFilter.afterPropertiesSet();
+        customAuthenticationFilter.setAuthenticationFailureHandler(customLoginFailureHandler());
+//        customAuthenticationFilter.afterPropertiesSet();
         return customAuthenticationFilter;
     }
 
+    //로그인 성공
     @Bean
     public CustomLoginSuccessHandler customLoginSuccessHandler(){
         return new CustomLoginSuccessHandler();
     }
 
+    //로그인 실패
+    @Bean
+    public CustomLoginFailureHandler customLoginFailureHandler() { return new CustomLoginFailureHandler();}
 
     @Bean
     public CustomAuthenticationProvider customAuthenticationProvider() {
         return new CustomAuthenticationProvider(userDetailService,bCryptPasswordEncoder());
     }
-
-//    @Autowired
-//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//        auth
-//                .jdbcAuthentication()
-//                .dataSource(dataSource)
-//                .withDefaultSchema()
-//                .withUser("user").password("password").roles("USER").and()
-//                .withUser("admin").password("password").roles("USER", "ADMIN");
-//    }
 
 }

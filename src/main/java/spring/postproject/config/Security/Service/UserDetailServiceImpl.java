@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import spring.postproject.Excetion.ExceptionBoard;
 import spring.postproject.Member.Entity.Member;
 import spring.postproject.Member.Repository.MemberRepository;
+import spring.postproject.config.Security.model.MemberAdaptor;
 import spring.postproject.config.Security.model.SecurityUserDetails;
 
 @RequiredArgsConstructor
@@ -22,15 +23,11 @@ public class UserDetailServiceImpl implements UserDetailsService{
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("UserDetails");
         log.info(username);
-        Member member = memberRepository.findByUserId(username).orElseThrow(ExceptionBoard.NOT_FOUND_MEMBER::getException);
+        Member member = memberRepository.findByUserId(username).orElseThrow(() -> new UsernameNotFoundException(username));
         log.info(member.getUserId());
         log.info(member.getPassword());
         log.info(member.getMemberRoll().toString());
         return new SecurityUserDetails(member);
-//        return User.builder()
-//                .username(member.getUserId())
-//                .password(member.getPassword())
-//                .roles(member.getMemberRoll().toString())
-//                .build();
+
     }
 }
