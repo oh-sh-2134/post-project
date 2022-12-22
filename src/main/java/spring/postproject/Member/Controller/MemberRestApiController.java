@@ -3,12 +3,8 @@ package spring.postproject.Member.Controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import spring.postproject.Member.Service.MemberService;
-import spring.postproject.Member.dto.MemberCreateDto;
 
-import javax.servlet.http.HttpServletRequest;
-import java.net.http.HttpRequest;
 import java.util.HashMap;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
