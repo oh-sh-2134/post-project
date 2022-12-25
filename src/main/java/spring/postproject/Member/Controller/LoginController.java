@@ -80,43 +80,15 @@ public class LoginController {
         return "redirect:/";
     }
 
-    @GetMapping("/member/new")
-    public String createMember(Model model){
-        log.info("createMember");
-        model.addAttribute("memberCreateDto",new MemberCreateDto());
-        return "member/memberCreate";
-    }
+    @GetMapping("/auth/loginFailure")
+    public String login(@RequestParam(value = "error", required = false) String error,
+                        @RequestParam(value = "exception", required = false) String exception,
+                        Model model) {
 
-    @PostMapping("/member/new")
-    public String create(@Valid MemberCreateDto memberCreateDto, BindingResult result, Model model){
-        log.info(memberCreateDto.getNickname() + memberCreateDto.getUserId() + memberCreateDto.getPassword());
-
-        if (result.hasErrors()) {
-            return "member/memberCreate";
-        }
-        log.info("create");
-        Member member = Member.builder()
-                .userId(memberCreateDto.getUserId())
-                .password(memberCreateDto.getPassword())
-                .nickName(memberCreateDto.getNickname())
-                .build();
-        log.info("member id : " + member.getId());
-
-        member.updateRole(MemberRoll.ROLE_NORMAL);
-        memberService.signUp(member);
-        log.info("member id : " + member.getId());
-
-        log.info("create ok : " + member.getNickname());
-
+        /* 에러와 예외를 모델에 담아 view resolve */
+        model.addAttribute("error", error);
+        model.addAttribute("exception", exception);
         return "/member/loginForm";
-    }
-
-
-    @GetMapping("/member/Info")
-    public String memberInfo(Model model){
-        //log.info("member info : " + member.getNickname());
-        //model.addAttribute("member",member);
-        return "login";
     }
 
     @GetMapping("/member/logout")
