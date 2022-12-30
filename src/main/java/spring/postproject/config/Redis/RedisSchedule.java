@@ -26,10 +26,8 @@ public class RedisSchedule {
         if(redisKeys == null) return;
         redisKeys = redisKeys.stream().filter(Objects::nonNull).collect(Collectors.toSet());
         for (String key : redisKeys) {
-            Object o = rt.opsForValue().get(key);
-            if(o == null) continue;
             Long postId = Long.parseLong(key.split("::")[1]);
-            Long viewCnt = Long.parseLong((String)o);
+            Long viewCnt = Long.parseLong(key);
             postService.addViewCntFromRedis(postId,viewCnt);
             rt.delete(key);
             rt.delete("postCnt::"+postId);
