@@ -1,14 +1,11 @@
 package spring.postproject.Comment.Service;
 
-import org.junit.Before;
-//import org.junit.Test;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import spring.postproject.Comment.Entitiy.Comment;
@@ -22,10 +19,11 @@ import spring.postproject.Post.PostDto.PostCreateDto;
 import spring.postproject.Post.Service.PostService;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @Transactional
+@Rollback
 public class CommentServiceTest {
 
     @Autowired
@@ -37,8 +35,8 @@ public class CommentServiceTest {
     @Autowired
     MemberService memberService;
 
-    private Member member;
-    private Post post;
+    public Member member;
+    public Post post;
 
     @BeforeEach
     void setMemberAndPost(){
@@ -47,6 +45,7 @@ public class CommentServiceTest {
         member = memberService.signUp(createMember("userId","nickName","password"));
         post = postService.create(PostCreateDto.builder().content("comment").title("Title").build());
     }
+
     @DisplayName("Comment save 테스트")
     @Test
     public void CommentSaveTest(){
